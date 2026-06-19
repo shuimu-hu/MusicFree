@@ -9,6 +9,7 @@ import downloader, { DownloadFailReason, DownloaderEvent } from "@/core/download
 import LocalMusicSheet from "@/core/localMusicSheet";
 import lyricManager from "@/core/lyricManager";
 import musicHistory from "@/core/musicHistory";
+import playStats from "@/core/playStats";
 import MusicSheet from "@/core/musicSheet";
 import PluginManager from "@/core/pluginManager";
 import Theme from "@/core/theme";
@@ -91,6 +92,9 @@ async function bootstrapImpl() {
         }),
         musicHistory.setup().then(() => {
             logger.mark("musicHistory");
+        }),
+        playStats.setup().then(() => {
+            logger.mark("playStats");
         }),
     ]);
     trace("配置初始化完成");

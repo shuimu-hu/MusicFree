@@ -30,6 +30,7 @@ import ReactNativeTrackPlayer, {
     useProgress,
 } from "react-native-track-player";
 import LocalMusicSheet from "../localMusicSheet";
+import playStats from "@/core/playStats";
 
 import { TrackPlayerEvents } from "@/core.defination/trackPlayer";
 import type { IAppConfig } from "@/types/core/config";
@@ -188,6 +189,8 @@ class TrackPlayer extends EventEmitter<{
             ReactNativeTrackPlayer.addEventListener(
                 Event.PlaybackActiveTrackChanged,
                 async evt => {
+                    // 统计：切歌时把已播放的时长落库
+                    playStats.flush();
                     if (
                         evt.index === 1 &&
                         evt.lastIndex === 0 &&
@@ -238,6 +241,14 @@ class TrackPlayer extends EventEmitter<{
 
                         this.handlePlayFail();
                     }
+                },
+            );
+
+            // 统计：根据播放状态累计听歌时长
+            ReactNativeTrackPlayer.addEventListener(
+                Event.PlaybackState,
+                evt => {
+                    playStats.notifyState(evt.state === State.Playing);
                 },
             );
 
@@ -572,6 +583,8 @@ class TrackPlayer extends EventEmitter<{
 
             // 8. 新增历史记录
             this.musicHistoryService.addMusic(musicItem);
+            // 8.1 统计：播放次数 +1
+            playStats.recordPlay(musicItem);
 
             trace("获取音源成功", track);
             // 9. 设置音源

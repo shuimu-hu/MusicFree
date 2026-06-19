@@ -38,6 +38,13 @@ export default function Operations() {
                 navigate(ROUTE_PATH.LOCAL);
             },
         },
+        {
+            iconName: "circle-stack",
+            title: "听歌统计",
+            action() {
+                navigate(ROUTE_PATH.PLAY_STATS);
+            },
+        },
     ] as const;
 
     return (
@@ -47,6 +54,7 @@ export default function Operations() {
                     style={[
                         styles.actionButtonStyle,
                         index % 4 ? styles.actionMarginLeft : null,
+                        index >= 4 ? styles.actionMarginTop : null,
                     ]}
                     key={action.title}
                     {...action}
@@ -62,7 +70,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: rpx(24),
         marginVertical: rpx(32),
         flexDirection: "row",
-        flexWrap: "nowrap",
+        flexWrap: "wrap",
     },
     actionButtonStyle: {
         width: rpx(157.5),
@@ -71,5 +79,8 @@ const styles = StyleSheet.create({
     },
     actionMarginLeft: {
         marginLeft: rpx(24),
+    },
+    actionMarginTop: {
+        marginTop: rpx(24),
     },
 });

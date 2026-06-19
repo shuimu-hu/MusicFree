@@ -15,6 +15,7 @@ import FileSelector from "@/pages/fileSelector";
 import RecommendSheets from "@/pages/recommendSheets";
 import PluginSheetDetail from "@/pages/pluginSheetDetail";
 import History from "@/pages/history";
+import PlayStats from "@/pages/playStats";
 import SetCustomTheme from "@/pages/setCustomTheme";
 import Permissions from "@/pages/permissions";
 import { ROUTE_PATH } from "@/core/router/index.ts";
@@ -96,6 +97,10 @@ export const routes: Array<IRoutes> = [
     {
         path: ROUTE_PATH.HISTORY,
         component: History,
+    },
+    {
+        path: ROUTE_PATH.PLAY_STATS,
+        component: PlayStats,
     },
     {
         path: ROUTE_PATH.SET_CUSTOM_THEME,
