@@ -47,6 +47,8 @@ jobs:
     needs: check-version
     if: needs.check-version.outputs.should_build == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -98,6 +100,18 @@ jobs:
           name: beta-apks-${{ needs.check-version.outputs.version }}
           path: android/app/build/outputs/apk/release/*.apk
           retention-days: 30
+
+      - name: Publish Release (供手机直接下载)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.check-version.outputs.version }}
+        run: |
+          gh release delete "v${VERSION}" --repo "${{ github.repository }}" --yes --cleanup-tag || true
+          gh release create "v${VERSION}" \
+            android/app/build/outputs/apk/release/*.apk \
+            --repo "${{ github.repository }}" \
+            --title "MusicFree 听歌统计版 ${VERSION}" \
+            --notes "自动构建版本，包含「听歌统计」功能（播放次数 + 累计时长）。手机安装 app-universal-release.apk 即可。"
 
       - name: Build Summary
         run: |
